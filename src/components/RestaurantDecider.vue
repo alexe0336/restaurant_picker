@@ -26,6 +26,7 @@
           </div>
           <div v-else>
             <h1>You picked {{ allCuisines[0] }} cuisine!</h1>
+            setCuisine();
             <div style="margin-top: 20px;">
               Enter Zip code to display nearby restaurants
             </div>
@@ -64,6 +65,7 @@
                 </v-col>
               </v-row>
             </v-form>
+
             
             <v-row style="margin-top: 10px">
               <v-col cols="12">
@@ -76,6 +78,10 @@
 
               <v-col cols="12">
                 //first restaurant
+                {
+                  "textQuery": "{} Food in Sydney, Australia",
+                  "pageSize": 3
+                }
               </v-col>
               <v-col cols="12">
                 //second restaurant
@@ -98,16 +104,19 @@
 </template>
 
 <script>
+import axios from 'axios';
 
 export default {
   data() {
     return {
       allCuisines: ['American', 'Chinese', 'French', 'Indian', 'Italian', 'Japanese', 'Mexican', 'Thai', 'Korean', 'Vietnamese', 'Mediterranean', 'Middle Eastern', 'Caribbean'],
       zipCode: '',
+      pickedCuisine: '',
       rules: {
         maxLength: value => (value && value.length === 5) || 'Zip Code must be 5 characters',
       },
       loading: false,
+      restaurants: [],
     };
   },
   methods: {
@@ -129,8 +138,28 @@ export default {
         this.location = position.coords.latitude + ',' + position.coords.longitude;
         this.loading = false;
       });
+    },
+    setCuisine() {
+      this.pickedCuisine = this.allCuisines[0];
+    },
+    constructApiUrl(pickedCuisine, zipcode) {
+      return `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${pickedCuisine}+restaurant+near+${zipcode}&key=YOUR_API_KEY`;
+    },
+    searchRestaurants() {
+      if (this.zipcode.length > 0) {
+        const apiUrl = this.constructApiUrl(this.allCuisines[0], this.zipcode);
+        axios.get(apiUrl)
+          .then(response => {
+            this.restaurants = response.data.results.slice(0, 3); // Limit to 3 restaurants
+          })
+          .catch(error => {
+            console.error('Error fetching restaurants:', error);
+          });
+      } else {
+        this.restaurants = [];
+      }
     }
-  }
+  },
 };
 </script>
 
