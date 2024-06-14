@@ -8,6 +8,11 @@
           <!-- Add your random cuisine logic here -->
           <h1>You randomly picked {{ randCuisine }}.</h1>
         </v-container>
+        <v-container>
+          <v-btn color="secondary" size="x-large" rounded="lg" elevation="20" @click="randomizeCuisine">
+            Randomize Again
+          </v-btn>
+        </v-container>
       </v-main>
     </v-app>
   </template>
@@ -27,6 +32,9 @@
     methods: {
       navigateToHome() {
         this.$router.push({ name: 'HomePage' });
+      },
+      randomizeCuisine() {
+        this.randCuisine = this.allCuisines[Math.floor(Math.random() * this.allCuisines.length)];
       }
     },
   };
