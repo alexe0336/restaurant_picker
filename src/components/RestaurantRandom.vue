@@ -2,7 +2,7 @@
     <v-app>
       <v-main>
         <v-toolbar>
-          <v-toolbar-title class="font-bold" @click="navigateToHome" >Cuisine Picker 👆</v-toolbar-title>
+          <v-toolbar-title class="font-bold" @click="navigateToHome" >Restaurant Picker 👆</v-toolbar-title>
         </v-toolbar>
         <v-container class="text-center">
           <!-- Add your random cuisine logic here -->
