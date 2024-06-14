@@ -1,21 +1,32 @@
 <template>
     <v-app>
-      <v-main>
-        <v-toolbar>
-          <v-toolbar-title class="font-bold" @click="navigateToHome">Restaurant Picker 👆</v-toolbar-title>
-        </v-toolbar>
-        <v-container class="text-center">
-          <v-col>
-            <v-btn color="primary" size="x-large" rounded="lg" elevation="20" @click="navigateTo('RestaurantPicker')">
-              Pick
-            </v-btn>
-          </v-col>
-          <v-col>
-            <v-btn color="secondary" size="x-large" rounded="lg" elevation="20" @click="navigateTo('RestaurantRandom')">
-              Random
-            </v-btn>
-          </v-col>
-        </v-container>
+      <v-main style="height: 100vh; display: flex; flex-direction: column;">
+        <header>
+          <v-toolbar>
+            <v-toolbar-title class="font-bold" @click="navigateToHome">Restaurant Decider 👆</v-toolbar-title>
+          </v-toolbar>
+        </header>
+
+        <body>
+          <v-container class="text-center">
+            <v-col cols="12" style="margin-top: 35%">
+              <v-btn color="primary" size="x-large" rounded="lg" elevation="20" @click="navigateTo('RestaurantDecider')">
+                Decide
+              </v-btn>
+            </v-col>
+            <div style="margin-top: 5%; font-size: 0.75rem">
+              <h1>OR</h1>
+            </div>
+            <v-col cols="12" style="margin-top: 5%">
+              <v-btn color="secondary" size="x-large" rounded="lg" elevation="20" @click="navigateTo('RestaurantRandom')">
+                Random
+              </v-btn>
+            </v-col>
+          </v-container>
+        </body>
+        <footer>
+          //Put ads here
+        </footer>
       </v-main>
     </v-app>
   </template>
@@ -36,6 +47,11 @@
   <style scoped>
   .font-bold {
     font-weight: bold;
+  }
+  footer {
+    margin-top: auto;
+    text-align: center;
+    padding: 10px;
   }
   </style>
   

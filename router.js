@@ -2,7 +2,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import HomePage from '@/components/HomePage.vue';
-import RestaurantPicker from '@/components/RestaurantPicker.vue';
+import RestaurantDecider from '@/components/RestaurantDecider.vue';
 import RestaurantRandom from '@/components/RestaurantRandom.vue';
 
 Vue.use(Router);
@@ -15,9 +15,9 @@ export default new Router({
       component: HomePage
     },
     {
-      path: '/picker',
-      name: 'RestaurantPicker',
-      component: RestaurantPicker
+      path: '/decider',
+      name: 'RestaurantDecider',
+      component: RestaurantDecider
     },
     {
       path: '/random',
