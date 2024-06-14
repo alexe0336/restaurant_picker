@@ -1,4 +1,4 @@
-# cuisine-picker
+# restaurant_picker
 
 ## Project setup
 ```
