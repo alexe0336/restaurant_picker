@@ -2,11 +2,11 @@
     <v-app>
       <v-main>
         <v-toolbar>
-          <v-toolbar-title class="font-bold">Random Cuisine</v-toolbar-title>
+          <v-toolbar-title class="font-bold" @click="navigateToHome" >Cuisine Picker 👆</v-toolbar-title>
         </v-toolbar>
         <v-container class="text-center">
           <!-- Add your random cuisine logic here -->
-          <h1>This is the Restaurant Random page.</h1>
+          <h1>You randomly picked {{ randCuisine }}.</h1>
         </v-container>
       </v-main>
     </v-app>
@@ -15,6 +15,20 @@
   <script>
   export default {
     name: 'RestaurantRandom',
+    data() {
+    return {
+      allCuisines: ['American', 'Chinese', 'French', 'Indian', 'Italian', 'Japanese', 'Mexican', 'Thai', 'Korean', 'Vietnamese', 'Mediterranean', 'Middle Eastern', 'Caribbean'],
+      randCuisine: '',
+    }
+    },
+    mounted() {
+      this.randCuisine = this.allCuisines[Math.floor(Math.random() * this.allCuisines.length)];
+    },
+    methods: {
+      navigateToHome() {
+        this.$router.push({ name: 'HomePage' });
+      }
+    },
   };
   </script>
   

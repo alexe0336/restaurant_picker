@@ -2,7 +2,7 @@
     <v-app>
       <v-main>
         <v-toolbar>
-          <v-toolbar-title class="font-bold">Cuisine Picker 👆</v-toolbar-title>
+          <v-toolbar-title class="font-bold" @click="navigateToHome">Cuisine Picker 👆</v-toolbar-title>
         </v-toolbar>
         <v-container class="text-center">
           <v-col>
@@ -25,7 +25,10 @@
     methods: {
       navigateTo(routeName) {
         this.$router.push({ name: routeName });
-      }
+      },
+      navigateToHome() {
+      this.$router.push({ name: 'HomePage' });
+    }
     }
   };
   </script>

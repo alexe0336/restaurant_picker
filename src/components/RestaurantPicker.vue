@@ -2,7 +2,7 @@
   <v-app>
     <v-main>
       <v-toolbar>
-        <v-toolbar-title class="font-bold">Cuisine Picker 👆</v-toolbar-title>
+        <v-toolbar-title class="font-bold" @click="navigateToHome" >Cuisine Picker 👆</v-toolbar-title>
       </v-toolbar>
       <v-container class="text-center">
         <div v-if="allCuisines.length > 1">
@@ -41,6 +41,9 @@ export default {
       const selected = this.allCuisines[index];
       this.allCuisines.splice(0, 2);
       this.allCuisines.unshift(selected);
+    },
+    navigateToHome() {
+      this.$router.push({ name: 'HomePage' });
     }
   }
 };

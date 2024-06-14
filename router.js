@@ -1,6 +1,7 @@
+// src/router.js
 import Vue from 'vue';
 import Router from 'vue-router';
-import HomePage from '@/components/Homepage.vue';
+import HomePage from '@/components/HomePage.vue';
 import RestaurantPicker from '@/components/RestaurantPicker.vue';
 import RestaurantRandom from '@/components/RestaurantRandom.vue';
 
@@ -10,8 +11,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Homepage',
-      component: Homepage
+      name: 'HomePage',
+      component: HomePage
     },
     {
       path: '/picker',
