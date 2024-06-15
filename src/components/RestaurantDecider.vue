@@ -107,7 +107,7 @@ export default {
       },
       loading: false,
       restaurants: [],
-      apiKey: 'AIzaSyBw-xEk_-94yM8Ggf4lIpE7LmjxheNAcrw', // Replace with your actual API key
+      apiKey: 'GOOGEL_API_KEY', // Replace with your actual API key
       location: '',
     };
   },
