@@ -3,100 +3,90 @@
     <v-main style="height: 100vh; display: flex; flex-direction: column;">
       <header>
         <v-toolbar>
-          <v-toolbar-title class="font-bold" @click="navigateToHome" >Restaurant Decider 👆</v-toolbar-title>
+          <v-toolbar-title class="font-bold" @click="navigateToHome">Restaurant Decider 👆</v-toolbar-title>
         </v-toolbar>
       </header>
 
-      <body>
-        <v-container class="text-center">
-          <div v-if="allCuisines.length > 1">
-            <v-col col="12" style="margin-top: 35%">
-              <v-btn color="primary" size="x-large" rounded="lg" elevation="20" @click="selectCuisine(0)">
-                {{ allCuisines[0] }}
-              </v-btn>
-            </v-col>
-            <div style="margin-top: 5%; font-size: 0.75rem">
-              <h1>OR</h1>
-            </div>
-            <v-col cols="12" style="margin-top: 5%">
-              <v-btn color="secondary" size="x-large" rounded="lg" elevation="20" @click="selectCuisine(1)">
-                {{ allCuisines[1] }}
-              </v-btn>
-            </v-col>
+      <v-container class="text-center">
+        <div v-if="allCuisines.length > 1">
+          <v-col col="12" style="margin-top: 35%">
+            <v-btn color="primary" size="x-large" rounded="lg" elevation="20" @click="selectCuisine(0)">
+              {{ allCuisines[0] }}
+            </v-btn>
+          </v-col>
+          <div style="margin-top: 5%; font-size: 0.75rem">
+            <h1>OR</h1>
           </div>
-          <div v-else>
-            <h1>You picked {{ allCuisines[0] }} cuisine!</h1>
-            setCuisine();
-            <div style="margin-top: 20px;">
-              Enter Zip code to display nearby restaurants
-            </div>
-            <v-form @submit.prevent="setZipCode" style="margin-top: 20px">
-              <v-row>
-                <v-col cols="12">
-                  <v-text-field
-                    v-model="zipCode"
-                    maxlength="5"
-                    :rules="[rules.maxLength]"
-                    label="Zip Code"
-                    placeholder="12345"
-                    type="text"
-                  ></v-text-field>
-                  <v-btn
-                    :loading="loading"
-                    class="mt-2"
-                    text="Submit"
-                    type="submit"
-                    block
-                  ></v-btn>
-                </v-col>
-                <v-col cols="12" class="text-center">
-                  <div style="margin-top: 10px;">
-                    Or use location
-                  </div>
-                </v-col>
-                <v-col cols="12">
-                  <v-btn
-                    color="primary"
-                    @click="getUserLocation"
-                    block
-                  >
-                    Use Location
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-form>
-
-            
-            <v-row style="margin-top: 10px">
+          <v-col cols="12" style="margin-top: 5%">
+            <v-btn color="secondary" size="x-large" rounded="lg" elevation="20" @click="selectCuisine(1)">
+              {{ allCuisines[1] }}
+            </v-btn>
+          </v-col>
+        </div>
+        <div v-else>
+          <h1 @load="this.setCuisine();">You picked {{ allCuisines[0] }} cuisine!</h1>
+          <div style="margin-top: 20px;">
+            Enter Zip code to display nearby restaurants
+          </div>
+          <v-form @submit.prevent="setZipCode" style="margin-top: 20px">
+            <v-row>
               <v-col cols="12">
-                <div>
-                  <h1>
-                    Restaurants Nearby
-                  </h1>
+                <v-text-field
+                  v-model="zipCode"
+                  maxlength="5"
+                  :rules="[rules.maxLength]"
+                  label="Zip Code"
+                  placeholder="12345"
+                  type="text"
+                ></v-text-field>
+                <v-btn
+                  :loading="loading"
+                  class="mt-2"
+                  text="Submit"
+                  type="submit"
+                  block
+                ></v-btn>
+              </v-col>
+              <v-col cols="12" class="text-center">
+                <div style="margin-top: 10px;">
+                  Or use location
                 </div>
               </v-col>
-
               <v-col cols="12">
-                //first restaurant
-                {
-                  "textQuery": "{} Food in Sydney, Australia",
-                  "pageSize": 3
-                }
-              </v-col>
-              <v-col cols="12">
-                //second restaurant
-              </v-col>
-              <v-col cols="12">
-                //third restaurant
+                <v-btn
+                  color="primary"
+                  @click="getUserLocation"
+                  block
+                >
+                  Use Location
+                </v-btn>
               </v-col>
             </v-row>
+          </v-form>
 
-          </div>
-        </v-container>
-      </body>
+          <v-row style="margin-top: 10px">
+            <v-col cols="12">
+              <div>
+                <h1>
+                  Restaurants Nearby
+                </h1>
+              </div>
+            </v-col>
+
+            <v-col cols="12" v-for="restaurant in restaurants" :key="restaurant.place_id">
+              <div>
+                <h3>{{ restaurant.name }}</h3>
+                <p>{{ restaurant.formattedAddress }}</p>
+                <p>Google Maps: <a :href="restaurant.url">{{ restaurant.googleMapsUri }}</a></p>
+              </div>
+            </v-col>
+          </v-row>
+
+        </div>
+      </v-container>
 
       <footer>
-        //Put ads here
+        <!-- Put ads here -->
       </footer>
 
     </v-main>
@@ -117,6 +107,8 @@ export default {
       },
       loading: false,
       restaurants: [],
+      apiKey: 'AIzaSyBw-xEk_-94yM8Ggf4lIpE7LmjxheNAcrw', // Replace with your actual API key
+      location: '',
     };
   },
   methods: {
@@ -130,35 +122,44 @@ export default {
       this.$router.push({ name: 'HomePage' });
     },
     setZipCode() {
-      this.zipcode = this.zipCode;
+      this.searchRestaurants();
     },
     getUserLocation() {
       this.loading = true;
       navigator.geolocation.getCurrentPosition((position) => {
         this.location = position.coords.latitude + ',' + position.coords.longitude;
+        this.searchRestaurants();
+      }, (error) => {
+        console.error('Error getting location:', error);
         this.loading = false;
       });
     },
     setCuisine() {
       this.pickedCuisine = this.allCuisines[0];
     },
-    constructApiUrl(pickedCuisine, zipcode) {
-      return `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${pickedCuisine}+restaurant+near+${zipcode}&key=YOUR_API_KEY`;
-    },
-    searchRestaurants() {
-      if (this.zipcode.length > 0) {
-        const apiUrl = this.constructApiUrl(this.allCuisines[0], this.zipcode);
-        axios.get(apiUrl)
-          .then(response => {
-            this.restaurants = response.data.results.slice(0, 3); // Limit to 3 restaurants
-          })
-          .catch(error => {
-            console.error('Error fetching restaurants:', error);
-          });
-      } else {
-        this.restaurants = [];
+    async searchRestaurants() {
+      this.loading = true;
+      try {
+        let query = `${this.pickedCuisine} restaurant`;
+
+        if (this.zipCode.length === 5) {
+          query += ` near ${this.zipCode}`;
+        } else if (this.location) {
+          query += ` near ${this.location}`;
+        } else {
+          throw new Error('Invalid zip code or location');
+        }
+
+        const response = await axios.get(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(query)}&inputtype=textquery&fields=formatted_address,name,url&key=${this.apiKey}`);
+
+        this.restaurants = response.data.candidates || [];
+      } catch (error) {
+        console.error('Error fetching restaurants:', error);
+      } finally {
+        this.loading = false;
       }
     }
+
   },
 };
 </script>
