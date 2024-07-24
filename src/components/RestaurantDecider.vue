@@ -174,3 +174,5 @@ footer {
     padding: 10px;
 }
 </style>
+
+//Try to implement this: https://developers.google.com/maps/documentation/javascript/place-details#javascript
