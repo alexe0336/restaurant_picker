@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,7 +11,22 @@
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
+    <gmpx-api-loader key="<%= process.env.VUE_APP_GOOGLE_PLACES_API_KEY %>" solution-channel="GMP_GCC_placeoverview_v1_m"></gmpx-api-loader>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <!-- <div id="divadsensedisplaynone" style="display:none;">
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7786624977203533"
+      crossorigin="anonymous"></script> -->
+      <!-- Footer -->
+      <!-- <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-7786624977203533"
+            data-ad-slot="2624040474"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins> -->
+      <!-- <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+      </script> -->
+    <!-- </div> -->
   </body>
 </html>

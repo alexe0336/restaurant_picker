@@ -62,16 +62,27 @@
                 </h1>
               </div>
             </v-col>
+            <!-- For loop to display google maps Places Overview web app snippets -->
+            <v-col cols="12" v-for="placeId in placeIds" :key="placeId">
+              <div v-if="placeId" class="restaurant-overview">
+                <gmpx-api-loader :key="place-overview-loader" solution-channel="GMP_GCC_placeoverview_v1_l">
+                  <gmpx-place-overview :place="placeId" size="large">
+                  </gmpx-place-overview>
+                </gmpx-api-loader>
+                <!-- Button to take user to PlaceID's google webpage -->
+                <v-btn
+                  color="#4285F4"
+                  dark              
+                  class="google-btn"
+                  @click="goToGoogleWebPage(placeId)"
+                >
+                  Google Page
+                </v-btn>
+              </div>
+            </v-col>
 
-            <v-col cols="12">
-              //first restaurant
-            </v-col>
-            <v-col cols="12">
-              //second restaurant
-            </v-col>
-            <v-col cols="12">
-              //third restaurant
-            </v-col>
+
+
           </v-row>
 
         </v-container>
@@ -86,52 +97,109 @@
   </v-app>
 </template>
   
-  <script>
-  export default {
-    name: 'RestaurantRandom',
-    data() {
+<script>
+import axios from 'axios';
+import '@googlemaps/extended-component-library/place_overview.js';
+import '@googlemaps/extended-component-library/api_loader.js';
+
+export default {
+  name: 'RestaurantRandom',
+  data() {
     return {
       allCuisines: ['American', 'Chinese', 'French', 'Indian', 'Italian', 'Japanese', 'Mexican', 'Thai', 'Korean', 'Vietnamese', 'Mediterranean', 'Middle Eastern', 'Caribbean'],
       randCuisine: '',
       zipCode: '',
+      pickedCuisine: '',
       rules: {
         maxLength: value => (value && value.length === 5) || 'Zip Code must be 5 characters',
       },
       loading: false,
-    }
+      restaurants: [],
+      location: '',
+      placeIds: [],
+      numberOfRestaurants: 5, // Changing this variables changes the amount of restaurants displayed.
+    };
+  },
+  mounted() {
+    this.randCuisine = this.allCuisines[Math.floor(Math.random() * this.allCuisines.length)];
+  },
+  methods: {
+    navigateToHome() {
+      this.$router.push({ name: 'HomePage' });
     },
-    mounted() {
+    randomizeCuisine() {
       this.randCuisine = this.allCuisines[Math.floor(Math.random() * this.allCuisines.length)];
     },
-    methods: {
-      navigateToHome() {
-        this.$router.push({ name: 'HomePage' });
-      },
-      randomizeCuisine() {
-        this.randCuisine = this.allCuisines[Math.floor(Math.random() * this.allCuisines.length)];
-      },
-      setZipCode() {
-      this.zipcode = this.zipCode;
-      },
-      getUserLocation() {
-        this.loading = true;
-        navigator.geolocation.getCurrentPosition((position) => {
-          this.location = position.coords.latitude + ',' + position.coords.longitude;
-          this.loading = false;
+    setZipCode() {
+      this.searchRestaurants();
+    },
+    getUserLocation() {
+      this.loading = true;
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.location = `${position.coords.latitude},${position.coords.longitude}`;
+        this.zipCode = ''; // Clears zip code to ensure that location/coordinates are used.
+        this.searchRestaurants();
+      }, (error) => {
+        console.error('Error getting location:', error);
+        this.loading = false;
+      });
+    },
+    async searchRestaurants() {
+      this.loading = true;
+      try {
+        let query = `${this.randCuisine} restaurant`;
+  
+        if (this.zipCode.length === 5) {
+          query += ` near:${this.zipCode}`;
+        } else if (this.location) {
+          query += ` near:${this.location}`;
+        } else {
+          throw new Error('Invalid zip code or location');
+        }
+  
+        const response = await axios.get('/api/search-restaurants', {
+          params: {
+            query: query,
+            fields: 'place_id',
+            limit: this.numberOfRestaurants,
+          }
         });
+        
+        this.placeIds = response.data.results.slice(0, this.numberOfRestaurants).map(result => result.place_id);
+
+      } catch (error) {
+        console.error('Error fetching restaurants:', error);
+      } finally {
+        this.loading = false;
       }
     },
-  };
-  </script>
+    goToGoogleWebPage(placeId) {
+      window.open(`https://www.google.com/maps/place/?q=place_id:${placeId}`);
+    },
+  },
+};
+</script>
   
-  <style scoped>
-  .font-bold {
-    font-weight: bold;
-  }
-  footer {
-    margin-top: auto;
-    text-align: center;
-    padding: 10px;
-  }
-  </style>
+<style scoped>
+.font-bold {
+  font-weight: bold;
+}
+.container {
+  width: 360px;
+}
+footer {
+  margin-top: auto;
+  text-align: center;
+  padding: 10px;
+}
+.restaurant-overview {
+  margin-bottom: 20px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+.google-btn {
+  text-transform: none !important;
+}
+</style>
   
