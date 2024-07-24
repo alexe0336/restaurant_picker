@@ -65,8 +65,8 @@
             <!-- For loop to display google maps Places Overview web app snippets -->
             <v-col cols="12" v-for="placeId in placeIds" :key="placeId">
               <div v-if="placeId" class="restaurant-overview">
-                <gmpx-api-loader :key="place-overview-loader" solution-channel="GMP_GCC_placeoverview_v1_l">
-                  <gmpx-place-overview :place="placeId" size="large">
+                <gmpx-api-loader :key="place-overview-loader" solution-channel="GMP_GCC_placeoverview_v1_m">
+                  <gmpx-place-overview :place="placeId" size="medium">
                   </gmpx-place-overview>
                 </gmpx-api-loader>
                 <!-- Button to take user to PlaceID's google webpage -->
