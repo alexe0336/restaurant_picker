@@ -2,7 +2,7 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import { createRouter, createWebHistory } from 'vue-router';
-import Homepage from './components/Homepage.vue';
+import HomePage from './components/HomePage.vue';
 import RestaurantDecider from './components/RestaurantDecider.vue';
 import RestaurantRandom from './components/RestaurantRandom.vue';
 import { Loader } from "@googlemaps/js-api-loader";
@@ -30,7 +30,7 @@ const vuetify = createVuetify({
 
 // Define your routes
 const routes = [
-  { path: '/', component: Homepage, name: 'Homepage' },
+  { path: '/', component: HomePage, name: 'HomePage' },
   { path: '/decider', component: RestaurantDecider, name: 'RestaurantDecider' },
   { path: '/random', component: RestaurantRandom, name: 'RestaurantRandom' }
 ];
